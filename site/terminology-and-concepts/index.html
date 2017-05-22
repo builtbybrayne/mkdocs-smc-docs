@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Terminology and Concepts - SMC Platform Design</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Terminology and Concepts";
+    var mkdocs_page_input_path = "terminology-and-concepts.md";
+    var mkdocs_page_url = "/terminology-and-concepts/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> SMC Platform Design</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Terminology and Concepts</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#terminology-and-concepts">Terminology and Concepts</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#the-platform-and-plugins">The Platform and Plugins</a></li>
+        
+            <li><a class="toctree-l3" href="#devices-and-signals">Devices and Signals</a></li>
+        
+            <li><a class="toctree-l3" href="#agents-and-messages">Agents and Messages</a></li>
+        
+            <li><a class="toctree-l3" href="#configuration-and-properties">Configuration and Properties</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../json-formats/">Config and Message Formats</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../signals-and-properties/">Currently Supported Signals and Properties</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">SMC Platform Design</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Terminology and Concepts</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="terminology-and-concepts">Terminology and Concepts</h1>
+<p>These terms are used within the SMC Platform, and drive the design of the API for integration with onsite hardware.</p>
+<h2 id="the-platform-and-plugins">The Platform and Plugins</h2>
+<p>The SMC <code>Platform</code> provides the infrastructure and generic functionality that allows us to interact with both the onsite hardware and the operator who needs to view data and define policy.</p>
+<p>It is a suite of software composed of microservices, databases, message routers, configuration, UIs etc. The aim is for the platform to be agnostic to the semantics of any given installation.</p>
+<p><code>Plugins</code> on the other hand provide the specific functionality associated with particular operations. They therefore require a semantic understanding of the domain in question - or at least the aspects of the domain pertinent to their functionality. E.g. operating a technical balance of energy producing devices requires a knowledge of power, units of power, the difference between power generators and consumers etc.</p>
+<p><em>NB: At the moment, the platform at Faccombe (FEL) is not actually built with a plugin architecture at a technical level, but this is a design goal.</em></p>
+<h2 id="devices-and-signals">Devices and Signals</h2>
+<p><code>Devices</code> are physical hardware entities such as sensors, meters, actuators etc. They may have an inbuilt software platform that allows us to interact with them, or they may require us to build some sort of low-level hardware integration. </p>
+<p><code>Devices</code> may constitute only a single physical device, such as a power meter. Or they may in reality be a collection of many physical devices. A wind turbine for example is actually a collection of multiple sensors as well as some control interfaces. </p>
+<p>The actual data created by devices is decomposed into a 2-tier hierarchy within the <code>platform</code>; <code>signals</code> and <code>attributes</code>. <code>Attributes</code> are the most primitive fields, usually numeric, boolean, strings etc. <code>Signals</code> are logical groupings of related <code>attributes</code> and these almost always - although not necessarily - correspond to the actual sensors and meters that make up the <code>device</code>. </p>
+<p>For example, a meter might emit messages at a lower frequency than its sampling rate, with numeric readings aggregated into multiple <code>attributes</code> including mean, std deviation, max and min. All these <code>attributes</code> are transmitted together and constitute a single <code>signal</code>. </p>
+<p><code>Signals</code> also help us decompose complex <code>devices</code> into generic collections of data readings for more generalised processing within the <code>platform</code>. For example, both wind turbines and pv arrays have sensors which register their power output. A general contract for power meters can be registered with the <code>platform</code> in the form of a schema that defines the expected <code>attributes</code> of a power meter. The integrations to both devices can reuse this contract to format data, in the knowledge that other components of the <code>platform</code> can also understand this power meter contract and consume the data.</p>
+<p>The API exposed to external integrations is in large part this set of schemas that define the known <code>signal</code> contracts. These schemas are registered with the <code>platform</code> against unique, predefined keys and form the semantic dictionary of the installation.</p>
+<h2 id="agents-and-messages">Agents and Messages</h2>
+<p><code>Agents</code> are the software clients which provide the edge integration with the <code>platform</code>. They interface with the software/hardware of the <code>device</code> to collect the <code>signals</code> and <code>attributes</code> and then send valid <code>messages</code> to the <code>platform</code>.</p>
+<p>In almost all cases, and certainly all early cases, the <code>agent</code> will need to be an integration built by us for the <code>device</code> or type of <code>device</code>, with an embedded client library for SMC. In best case scenarios the <code>devices</code> will have standardised interfaces which allows us to create small reusable <code>agents</code>. In more complicated or unique setups a custom <code>agent</code> will have to be written just for that <code>device</code>. </p>
+<p>Where <code>devices</code> have internet accessible APIS, <code>agents</code> can be run on platform hardware. But where <code>devices</code> require a physical integration it is most likely that <code>agents</code> will be colocated with the <code>device</code> itself.</p>
+<p><code>Messages</code> are simply json documents which include a certain amount of meta-information (such as time sent) and a collection of <code>signals</code>.</p>
+<p>The messaging transport approach has until now been simply http, but we will be using mqtt from here on in.</p>
+<h3 id="signal-messages-vs-control-messages">Signal Messages vs Control Messages</h3>
+<p>At the moment control <code>messages</code> are sent by the <code>platform</code> using exactly the same terminology as <code>signals</code>. They could be considered as <code>signals</code> <em>from</em> the <code>platform</code> to <code>agents</code>. However, this may be a bad design and could do with some discussion.</p>
+<h2 id="configuration-and-properties">Configuration and Properties</h2>
+<p>Much like <code>messages</code> are composed of <code>signals</code> that adhere to predefined contracts, the configuration for <code>devices</code> and <code>agents</code> is similarly split into composable contracts called <code>properties</code>. </p>
+<p>Often, where a <code>device</code> or <code>agent</code> adheres to a <code>signal's</code> contract it can or must also then provide some additional configuration details. This is particularly relevant for <code>device</code> configuration, where a generic <code>agent</code> (e.g. a generic power meter integration) needs to know details about the readings generated by the device so that it compose a <code>message</code> with the correct <code>attributes</code> for each <code>signal</code>.  </p>
+<p>In the example of the generic power meter <code>agent</code>, the <code>device</code> may emit just a single numeric reading without specifying units. The <code>agent</code> needs to know what units the power meter is measuring in and whether positive values imply production or consumption. </p>
+<p>When the <code>agent</code> and <code>device</code> are registered with the <code>platform</code> these configuration details can be provided as <code>properties</code> within the json configuration. These are seperate from the platform-specific configuration fields (such as id, heartbeat etc) which are also supplied on registration.</p>
+<p><code>Properties</code> are themselves registered with the <code>platform</code> as schemas against a unique predefined key, just like <code>signals</code>.</p>
+<p>Where <code>properties</code> relate to specific <code>signals</code> the keys should be the same. </p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../json-formats/" class="btn btn-neutral float-right" title="Config and Message Formats">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../json-formats/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>

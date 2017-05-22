@@ -1,0 +1,174 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Platform Design\n\n\n\n\nTerminology and Concepts\n\n\nConfiguration and Message Formats\n\n\nCurrently Supported Signals and Properties", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#platform-design", 
+            "text": "Terminology and Concepts  Configuration and Message Formats  Currently Supported Signals and Properties", 
+            "title": "Platform Design"
+        }, 
+        {
+            "location": "/terminology-and-concepts/", 
+            "text": "Terminology and Concepts\n\n\nThese terms are used within the SMC Platform, and drive the design of the API for integration with onsite hardware.\n\n\nThe Platform and Plugins\n\n\nThe SMC \nPlatform\n provides the infrastructure and generic functionality that allows us to interact with both the onsite hardware and the operator who needs to view data and define policy.\n\n\nIt is a suite of software composed of microservices, databases, message routers, configuration, UIs etc. The aim is for the platform to be agnostic to the semantics of any given installation.\n\n\nPlugins\n on the other hand provide the specific functionality associated with particular operations. They therefore require a semantic understanding of the domain in question - or at least the aspects of the domain pertinent to their functionality. E.g. operating a technical balance of energy producing devices requires a knowledge of power, units of power, the difference between power generators and consumers etc.\n\n\nNB: At the moment, the platform at Faccombe (FEL) is not actually built with a plugin architecture at a technical level, but this is a design goal.\n\n\nDevices and Signals\n\n\nDevices\n are physical hardware entities such as sensors, meters, actuators etc. They may have an inbuilt software platform that allows us to interact with them, or they may require us to build some sort of low-level hardware integration. \n\n\nDevices\n may constitute only a single physical device, such as a power meter. Or they may in reality be a collection of many physical devices. A wind turbine for example is actually a collection of multiple sensors as well as some control interfaces. \n\n\nThe actual data created by devices is decomposed into a 2-tier hierarchy within the \nplatform\n; \nsignals\n and \nattributes\n. \nAttributes\n are the most primitive fields, usually numeric, boolean, strings etc. \nSignals\n are logical groupings of related \nattributes\n and these almost always - although not necessarily - correspond to the actual sensors and meters that make up the \ndevice\n. \n\n\nFor example, a meter might emit messages at a lower frequency than its sampling rate, with numeric readings aggregated into multiple \nattributes\n including mean, std deviation, max and min. All these \nattributes\n are transmitted together and constitute a single \nsignal\n. \n\n\nSignals\n also help us decompose complex \ndevices\n into generic collections of data readings for more generalised processing within the \nplatform\n. For example, both wind turbines and pv arrays have sensors which register their power output. A general contract for power meters can be registered with the \nplatform\n in the form of a schema that defines the expected \nattributes\n of a power meter. The integrations to both devices can reuse this contract to format data, in the knowledge that other components of the \nplatform\n can also understand this power meter contract and consume the data.\n\n\nThe API exposed to external integrations is in large part this set of schemas that define the known \nsignal\n contracts. These schemas are registered with the \nplatform\n against unique, predefined keys and form the semantic dictionary of the installation.\n\n\nAgents and Messages\n\n\nAgents\n are the software clients which provide the edge integration with the \nplatform\n. They interface with the software/hardware of the \ndevice\n to collect the \nsignals\n and \nattributes\n and then send valid \nmessages\n to the \nplatform\n.\n\n\nIn almost all cases, and certainly all early cases, the \nagent\n will need to be an integration built by us for the \ndevice\n or type of \ndevice\n, with an embedded client library for SMC. In best case scenarios the \ndevices\n will have standardised interfaces which allows us to create small reusable \nagents\n. In more complicated or unique setups a custom \nagent\n will have to be written just for that \ndevice\n. \n\n\nWhere \ndevices\n have internet accessible APIS, \nagents\n can be run on platform hardware. But where \ndevices\n require a physical integration it is most likely that \nagents\n will be colocated with the \ndevice\n itself.\n\n\nMessages\n are simply json documents which include a certain amount of meta-information (such as time sent) and a collection of \nsignals\n.\n\n\nThe messaging transport approach has until now been simply http, but we will be using mqtt from here on in.\n\n\nSignal Messages vs Control Messages\n\n\nAt the moment control \nmessages\n are sent by the \nplatform\n using exactly the same terminology as \nsignals\n. They could be considered as \nsignals\n \nfrom\n the \nplatform\n to \nagents\n. However, this may be a bad design and could do with some discussion.\n\n\nConfiguration and Properties\n\n\nMuch like \nmessages\n are composed of \nsignals\n that adhere to predefined contracts, the configuration for \ndevices\n and \nagents\n is similarly split into composable contracts called \nproperties\n. \n\n\nOften, where a \ndevice\n or \nagent\n adheres to a \nsignal's\n contract it can or must also then provide some additional configuration details. This is particularly relevant for \ndevice\n configuration, where a generic \nagent\n (e.g. a generic power meter integration) needs to know details about the readings generated by the device so that it compose a \nmessage\n with the correct \nattributes\n for each \nsignal\n.  \n\n\nIn the example of the generic power meter \nagent\n, the \ndevice\n may emit just a single numeric reading without specifying units. The \nagent\n needs to know what units the power meter is measuring in and whether positive values imply production or consumption. \n\n\nWhen the \nagent\n and \ndevice\n are registered with the \nplatform\n these configuration details can be provided as \nproperties\n within the json configuration. These are seperate from the platform-specific configuration fields (such as id, heartbeat etc) which are also supplied on registration.\n\n\nProperties\n are themselves registered with the \nplatform\n as schemas against a unique predefined key, just like \nsignals\n.\n\n\nWhere \nproperties\n relate to specific \nsignals\n the keys should be the same.", 
+            "title": "Terminology and Concepts"
+        }, 
+        {
+            "location": "/terminology-and-concepts/#terminology-and-concepts", 
+            "text": "These terms are used within the SMC Platform, and drive the design of the API for integration with onsite hardware.", 
+            "title": "Terminology and Concepts"
+        }, 
+        {
+            "location": "/terminology-and-concepts/#the-platform-and-plugins", 
+            "text": "The SMC  Platform  provides the infrastructure and generic functionality that allows us to interact with both the onsite hardware and the operator who needs to view data and define policy.  It is a suite of software composed of microservices, databases, message routers, configuration, UIs etc. The aim is for the platform to be agnostic to the semantics of any given installation.  Plugins  on the other hand provide the specific functionality associated with particular operations. They therefore require a semantic understanding of the domain in question - or at least the aspects of the domain pertinent to their functionality. E.g. operating a technical balance of energy producing devices requires a knowledge of power, units of power, the difference between power generators and consumers etc.  NB: At the moment, the platform at Faccombe (FEL) is not actually built with a plugin architecture at a technical level, but this is a design goal.", 
+            "title": "The Platform and Plugins"
+        }, 
+        {
+            "location": "/terminology-and-concepts/#devices-and-signals", 
+            "text": "Devices  are physical hardware entities such as sensors, meters, actuators etc. They may have an inbuilt software platform that allows us to interact with them, or they may require us to build some sort of low-level hardware integration.   Devices  may constitute only a single physical device, such as a power meter. Or they may in reality be a collection of many physical devices. A wind turbine for example is actually a collection of multiple sensors as well as some control interfaces.   The actual data created by devices is decomposed into a 2-tier hierarchy within the  platform ;  signals  and  attributes .  Attributes  are the most primitive fields, usually numeric, boolean, strings etc.  Signals  are logical groupings of related  attributes  and these almost always - although not necessarily - correspond to the actual sensors and meters that make up the  device .   For example, a meter might emit messages at a lower frequency than its sampling rate, with numeric readings aggregated into multiple  attributes  including mean, std deviation, max and min. All these  attributes  are transmitted together and constitute a single  signal .   Signals  also help us decompose complex  devices  into generic collections of data readings for more generalised processing within the  platform . For example, both wind turbines and pv arrays have sensors which register their power output. A general contract for power meters can be registered with the  platform  in the form of a schema that defines the expected  attributes  of a power meter. The integrations to both devices can reuse this contract to format data, in the knowledge that other components of the  platform  can also understand this power meter contract and consume the data.  The API exposed to external integrations is in large part this set of schemas that define the known  signal  contracts. These schemas are registered with the  platform  against unique, predefined keys and form the semantic dictionary of the installation.", 
+            "title": "Devices and Signals"
+        }, 
+        {
+            "location": "/terminology-and-concepts/#agents-and-messages", 
+            "text": "Agents  are the software clients which provide the edge integration with the  platform . They interface with the software/hardware of the  device  to collect the  signals  and  attributes  and then send valid  messages  to the  platform .  In almost all cases, and certainly all early cases, the  agent  will need to be an integration built by us for the  device  or type of  device , with an embedded client library for SMC. In best case scenarios the  devices  will have standardised interfaces which allows us to create small reusable  agents . In more complicated or unique setups a custom  agent  will have to be written just for that  device .   Where  devices  have internet accessible APIS,  agents  can be run on platform hardware. But where  devices  require a physical integration it is most likely that  agents  will be colocated with the  device  itself.  Messages  are simply json documents which include a certain amount of meta-information (such as time sent) and a collection of  signals .  The messaging transport approach has until now been simply http, but we will be using mqtt from here on in.", 
+            "title": "Agents and Messages"
+        }, 
+        {
+            "location": "/terminology-and-concepts/#signal-messages-vs-control-messages", 
+            "text": "At the moment control  messages  are sent by the  platform  using exactly the same terminology as  signals . They could be considered as  signals   from  the  platform  to  agents . However, this may be a bad design and could do with some discussion.", 
+            "title": "Signal Messages vs Control Messages"
+        }, 
+        {
+            "location": "/terminology-and-concepts/#configuration-and-properties", 
+            "text": "Much like  messages  are composed of  signals  that adhere to predefined contracts, the configuration for  devices  and  agents  is similarly split into composable contracts called  properties .   Often, where a  device  or  agent  adheres to a  signal's  contract it can or must also then provide some additional configuration details. This is particularly relevant for  device  configuration, where a generic  agent  (e.g. a generic power meter integration) needs to know details about the readings generated by the device so that it compose a  message  with the correct  attributes  for each  signal .    In the example of the generic power meter  agent , the  device  may emit just a single numeric reading without specifying units. The  agent  needs to know what units the power meter is measuring in and whether positive values imply production or consumption.   When the  agent  and  device  are registered with the  platform  these configuration details can be provided as  properties  within the json configuration. These are seperate from the platform-specific configuration fields (such as id, heartbeat etc) which are also supplied on registration.  Properties  are themselves registered with the  platform  as schemas against a unique predefined key, just like  signals .  Where  properties  relate to specific  signals  the keys should be the same.", 
+            "title": "Configuration and Properties"
+        }, 
+        {
+            "location": "/json-formats/", 
+            "text": "Configuration and Message Formats\n\n\nThis is a manually generated doc with examples. It is not canonical. See \nhttps://bitbucket.org/smc-dev/smc-validators\n for actual schemas.\n\n\nI intend to auto-generate docs for schemas fairly soon\n\n\nDevice Config\n\n\n{\n  \ntype\n: \ndeviceConfig\n, // must be \ndeviceConfig',\n  \nversion\n: \n2.0.0\n, // Must be 2.0.0\n  \ndeviceId\n: \nDEVICE ID\n, // some unique string. TBD\n  \nns\n: \nNAMESPACE\n, // \nfel\n for faccombe. Other sites TBD\n  \nname\n: \nDEVICE NAME\n, // human-friendly name for the device\n  \ndescription\n: \nDESCRIPTION\n, // additional details describing the device\n  \nheartbeat\n: {\n    \nfrequency\n: 0, // in ms. 0 implies no heartbeat. Default is 0\n    \ntimeout\n: 0 // in ms. 0 implies no timeout. Default is 0\n  },\n  \nproperties\n: {\n    // optional properties dictionary\n  }\n}\n\n\n\n\nAgent Config\n\n\n{\n  \ntype\n: \nagentConfig\n, // must be \nagentConfig',\n  \nversion\n: \n2.0.0\n, // Must be 2.0.0\n  \nagentId\n: \nAGENT ID\n, // some unique string. TBD\n  \nenabled\n: \nyes\n, // \nyes\n or \nno. Default is \nyes\n. (Messages from disabled agents are ignored)\n  \ndescription\n: \nDESCRIPTION\n, // additional details describing the agent\n  \ndeviceId\n: \nDEVICE ID\n, // the device this agent is an integration for\n  \nns\n: \nNAMESPACE\n, // \nfel\n for faccombe. Other sites TBD\n  \nheartbeat\n: {\n    \nfrequency\n: 0, // in ms. 0 implies no heartbeat. Default is 0\n    \ntimeout\n: 0, // in ms. 0 implies no timeout. Default is 0\n  },\n  \nproperties\n: {\n    // optional properties dictionary\n  }\n}\n\n\n\n\nMessages\n\n\n{\n  \ntype\n: \nmessage\n, // must be message\n  \nversion\n: \n2.0.0\n, // must be 2.0.0\n  \ntime\n: \nISOFORMAT DATE STRING\n, // e.g. 2017-05-18T14:08:49.291Z\n  \nagentId\n: \nAGENT ID\n, // e.g. manor_sensor\n  \nagentStatus\n: \non\n, // 'on' or 'off'\n  \ndeviceStatus\n: \non\n, // 'on', 'off' or 'unknown'\n  \nns\n: \nNAMESPACE\n, // \nfel\n for Faccombe. Other sites tbd\n  \ndescription\n: \nHUMAN FRIENDLY MESSAGE\n,\n  \nsignals\n: {\n    // Optional signals from device\n  }\n}", 
+            "title": "Config and Message Formats"
+        }, 
+        {
+            "location": "/json-formats/#configuration-and-message-formats", 
+            "text": "This is a manually generated doc with examples. It is not canonical. See  https://bitbucket.org/smc-dev/smc-validators  for actual schemas.  I intend to auto-generate docs for schemas fairly soon", 
+            "title": "Configuration and Message Formats"
+        }, 
+        {
+            "location": "/json-formats/#device-config", 
+            "text": "{\n   type :  deviceConfig , // must be  deviceConfig',\n   version :  2.0.0 , // Must be 2.0.0\n   deviceId :  DEVICE ID , // some unique string. TBD\n   ns :  NAMESPACE , //  fel  for faccombe. Other sites TBD\n   name :  DEVICE NAME , // human-friendly name for the device\n   description :  DESCRIPTION , // additional details describing the device\n   heartbeat : {\n     frequency : 0, // in ms. 0 implies no heartbeat. Default is 0\n     timeout : 0 // in ms. 0 implies no timeout. Default is 0\n  },\n   properties : {\n    // optional properties dictionary\n  }\n}", 
+            "title": "Device Config"
+        }, 
+        {
+            "location": "/json-formats/#agent-config", 
+            "text": "{\n   type :  agentConfig , // must be  agentConfig',\n   version :  2.0.0 , // Must be 2.0.0\n   agentId :  AGENT ID , // some unique string. TBD\n   enabled :  yes , //  yes  or  no. Default is  yes . (Messages from disabled agents are ignored)\n   description :  DESCRIPTION , // additional details describing the agent\n   deviceId :  DEVICE ID , // the device this agent is an integration for\n   ns :  NAMESPACE , //  fel  for faccombe. Other sites TBD\n   heartbeat : {\n     frequency : 0, // in ms. 0 implies no heartbeat. Default is 0\n     timeout : 0, // in ms. 0 implies no timeout. Default is 0\n  },\n   properties : {\n    // optional properties dictionary\n  }\n}", 
+            "title": "Agent Config"
+        }, 
+        {
+            "location": "/json-formats/#messages", 
+            "text": "{\n   type :  message , // must be message\n   version :  2.0.0 , // must be 2.0.0\n   time :  ISOFORMAT DATE STRING , // e.g. 2017-05-18T14:08:49.291Z\n   agentId :  AGENT ID , // e.g. manor_sensor\n   agentStatus :  on , // 'on' or 'off'\n   deviceStatus :  on , // 'on', 'off' or 'unknown'\n   ns :  NAMESPACE , //  fel  for Faccombe. Other sites tbd\n   description :  HUMAN FRIENDLY MESSAGE ,\n   signals : {\n    // Optional signals from device\n  }\n}", 
+            "title": "Messages"
+        }, 
+        {
+            "location": "/signals-and-properties/", 
+            "text": "Currently Supported Signals and Properties\n\n\nThis is a manually generated doc with examples. It is not canonical. See \nhttps://bitbucket.org/smc-dev/smc-validators\n for actual schemas.\n\n\nI intend to auto-generate docs for schemas fairly soon (Al)\n\n\nMany of these are quite 'organic' and very much up for improvement given further domain knowledge.\n\n\nPower Generator\n\n\nDefines a generic power generator contract\n\n\nProperty\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nunits\n: \nkW\n, // MW, kW or W. Default is kW\n}\n\n\n\n\nSignal\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \npower\n: 300 // Int or float\n}\n\n\n\n\nPower Meter\n\n\nDefines a generic power meter contract\n\n\nProperty\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nunits\n: \nkW\n // MW, kW or W. Default is kW\n  \npositiveIsProduction\n: true // Butoolean. Default is true\n}\n\n\n\n\nSignal\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nactivePower\n: 300, // Int or float. Units as per property\n  \nreactivePower\n: 300, // Int or float. Optional\n  \napparentPower\n: 300, // Int or float. Optional\n  \nvoltageAverage\n: 240, // Int of float. Optional\n}\n\n\n\n\nWindspeed Meter\n\n\nDefines a generic windspeed meter contract\n\n\nProperty\n\n\nNone\n\n\nSignal\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nwindspeed\n: 4 // Int or float. In m/s\n}\n\n\n\n\nSetlevel\n\n\nDefines the setlevel contract for a controllable power generator\n\n\nNB: This is currently a signal \nfrom\n the platform to the agent. This may be better expressed as a control message and be placed elsewhere\n\n\nProperty\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nmin\n: 300, // Int. In kW\n  \nmax\n: 500 // Int. Must be \n min if min is set. In kW\n}\n\n\n\n\nSignal\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nsetlevel\n: 300 // Int. In kW\n}\n\n\n\n\nExport Channel\n\n\nDefines the contract for power export from an electricity network (e.g. a grid connection) \n\n\nProperty\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nlimit\n: 300, // Int. In kW. Must be \n= 0. 0 implies no limit\n}\n\n\n\n\nSignal\n\n\nNone\n\n\nNetwork\n\n\nDefines the contract for specifying software network details for a device\n\n\nProperty\n\n\n{\n  \nversion\n: \n2.0.0\n, // Optional. Defers to containing document version\n  \nip\n: \n1.2.3.4\n, // Must be an ip. Required if \ndns\n is missing\n  \ndns\n: \nhostname.smc\n // Must be a dns resolvable hostname or entry. Required if \nip\n is missing\n}\n\n\n\n\nSignal\n\n\nNone", 
+            "title": "Currently Supported Signals and Properties"
+        }, 
+        {
+            "location": "/signals-and-properties/#currently-supported-signals-and-properties", 
+            "text": "This is a manually generated doc with examples. It is not canonical. See  https://bitbucket.org/smc-dev/smc-validators  for actual schemas.  I intend to auto-generate docs for schemas fairly soon (Al)  Many of these are quite 'organic' and very much up for improvement given further domain knowledge.", 
+            "title": "Currently Supported Signals and Properties"
+        }, 
+        {
+            "location": "/signals-and-properties/#power-generator", 
+            "text": "Defines a generic power generator contract", 
+            "title": "Power Generator"
+        }, 
+        {
+            "location": "/signals-and-properties/#property", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   units :  kW , // MW, kW or W. Default is kW\n}", 
+            "title": "Property"
+        }, 
+        {
+            "location": "/signals-and-properties/#signal", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   power : 300 // Int or float\n}", 
+            "title": "Signal"
+        }, 
+        {
+            "location": "/signals-and-properties/#power-meter", 
+            "text": "Defines a generic power meter contract", 
+            "title": "Power Meter"
+        }, 
+        {
+            "location": "/signals-and-properties/#property_1", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   units :  kW  // MW, kW or W. Default is kW\n   positiveIsProduction : true // Butoolean. Default is true\n}", 
+            "title": "Property"
+        }, 
+        {
+            "location": "/signals-and-properties/#signal_1", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   activePower : 300, // Int or float. Units as per property\n   reactivePower : 300, // Int or float. Optional\n   apparentPower : 300, // Int or float. Optional\n   voltageAverage : 240, // Int of float. Optional\n}", 
+            "title": "Signal"
+        }, 
+        {
+            "location": "/signals-and-properties/#windspeed-meter", 
+            "text": "Defines a generic windspeed meter contract", 
+            "title": "Windspeed Meter"
+        }, 
+        {
+            "location": "/signals-and-properties/#property_2", 
+            "text": "None", 
+            "title": "Property"
+        }, 
+        {
+            "location": "/signals-and-properties/#signal_2", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   windspeed : 4 // Int or float. In m/s\n}", 
+            "title": "Signal"
+        }, 
+        {
+            "location": "/signals-and-properties/#setlevel", 
+            "text": "Defines the setlevel contract for a controllable power generator  NB: This is currently a signal  from  the platform to the agent. This may be better expressed as a control message and be placed elsewhere", 
+            "title": "Setlevel"
+        }, 
+        {
+            "location": "/signals-and-properties/#property_3", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   min : 300, // Int. In kW\n   max : 500 // Int. Must be   min if min is set. In kW\n}", 
+            "title": "Property"
+        }, 
+        {
+            "location": "/signals-and-properties/#signal_3", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   setlevel : 300 // Int. In kW\n}", 
+            "title": "Signal"
+        }, 
+        {
+            "location": "/signals-and-properties/#export-channel", 
+            "text": "Defines the contract for power export from an electricity network (e.g. a grid connection)", 
+            "title": "Export Channel"
+        }, 
+        {
+            "location": "/signals-and-properties/#property_4", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   limit : 300, // Int. In kW. Must be  = 0. 0 implies no limit\n}", 
+            "title": "Property"
+        }, 
+        {
+            "location": "/signals-and-properties/#signal_4", 
+            "text": "None", 
+            "title": "Signal"
+        }, 
+        {
+            "location": "/signals-and-properties/#network", 
+            "text": "Defines the contract for specifying software network details for a device", 
+            "title": "Network"
+        }, 
+        {
+            "location": "/signals-and-properties/#property_5", 
+            "text": "{\n   version :  2.0.0 , // Optional. Defers to containing document version\n   ip :  1.2.3.4 , // Must be an ip. Required if  dns  is missing\n   dns :  hostname.smc  // Must be a dns resolvable hostname or entry. Required if  ip  is missing\n}", 
+            "title": "Property"
+        }, 
+        {
+            "location": "/signals-and-properties/#signal_5", 
+            "text": "None", 
+            "title": "Signal"
+        }
+    ]
+}

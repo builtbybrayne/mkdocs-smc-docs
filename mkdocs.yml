@@ -1,1 +1,7 @@
-site_name: My Docs
+site_name: SMC Platform Design
+pages:
+    - Home: index.md
+    - Terminology and Concepts: terminology-and-concepts.md
+    - Config and Message Formats: json-formats.md
+    - Currently Supported Signals and Properties: signals-and-properties.md
+theme: readthedocs

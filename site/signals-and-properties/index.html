@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Currently Supported Signals and Properties - SMC Platform Design</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Currently Supported Signals and Properties";
+    var mkdocs_page_input_path = "signals-and-properties.md";
+    var mkdocs_page_url = "/signals-and-properties/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> SMC Platform Design</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../terminology-and-concepts/">Terminology and Concepts</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../json-formats/">Config and Message Formats</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Currently Supported Signals and Properties</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#currently-supported-signals-and-properties">Currently Supported Signals and Properties</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#power-generator">Power Generator</a></li>
+        
+            <li><a class="toctree-l3" href="#power-meter">Power Meter</a></li>
+        
+            <li><a class="toctree-l3" href="#windspeed-meter">Windspeed Meter</a></li>
+        
+            <li><a class="toctree-l3" href="#setlevel">Setlevel</a></li>
+        
+            <li><a class="toctree-l3" href="#export-channel">Export Channel</a></li>
+        
+            <li><a class="toctree-l3" href="#network">Network</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">SMC Platform Design</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Currently Supported Signals and Properties</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="currently-supported-signals-and-properties">Currently Supported Signals and Properties</h1>
+<p>This is a manually generated doc with examples. It is not canonical. See <a href="">https://bitbucket.org/smc-dev/smc-validators</a> for actual schemas.</p>
+<p><em>I intend to auto-generate docs for schemas fairly soon (Al)</em></p>
+<p><em>Many of these are quite 'organic' and very much up for improvement given further domain knowledge.</em></p>
+<h2 id="power-generator">Power Generator</h2>
+<p>Defines a generic power generator contract</p>
+<h3 id="property">Property</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;units&quot;: &quot;kW&quot;, // MW, kW or W. Default is kW
+}
+</code></pre>
+
+<h3 id="signal">Signal</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;power&quot;: 300 // Int or float
+}
+</code></pre>
+
+<h2 id="power-meter">Power Meter</h2>
+<p>Defines a generic power meter contract</p>
+<h3 id="property_1">Property</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;units&quot;: &quot;kW&quot; // MW, kW or W. Default is kW
+  &quot;positiveIsProduction&quot;: true // Butoolean. Default is true
+}
+</code></pre>
+
+<h3 id="signal_1">Signal</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;activePower&quot;: 300, // Int or float. Units as per property
+  &quot;reactivePower&quot;: 300, // Int or float. Optional
+  &quot;apparentPower&quot;: 300, // Int or float. Optional
+  &quot;voltageAverage&quot;: 240, // Int of float. Optional
+}
+</code></pre>
+
+<h2 id="windspeed-meter">Windspeed Meter</h2>
+<p>Defines a generic windspeed meter contract</p>
+<h3 id="property_2">Property</h3>
+<p>None</p>
+<h3 id="signal_2">Signal</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;windspeed&quot;: 4 // Int or float. In m/s
+}
+</code></pre>
+
+<h2 id="setlevel">Setlevel</h2>
+<p>Defines the setlevel contract for a controllable power generator</p>
+<p><em>NB: This is currently a signal <strong>from</strong> the platform to the agent. This may be better expressed as a control message and be placed elsewhere</em></p>
+<h3 id="property_3">Property</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;min&quot;: 300, // Int. In kW
+  &quot;max&quot;: 500 // Int. Must be &gt; min if min is set. In kW
+}
+</code></pre>
+
+<h3 id="signal_3">Signal</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;setlevel&quot;: 300 // Int. In kW
+}
+</code></pre>
+
+<h2 id="export-channel">Export Channel</h2>
+<p>Defines the contract for power export from an electricity network (e.g. a grid connection) </p>
+<h3 id="property_4">Property</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;limit&quot;: 300, // Int. In kW. Must be &gt;= 0. 0 implies no limit
+}
+</code></pre>
+
+<h3 id="signal_4">Signal</h3>
+<p>None</p>
+<h2 id="network">Network</h2>
+<p>Defines the contract for specifying software network details for a device</p>
+<h3 id="property_5">Property</h3>
+<pre><code class="js">{
+  &quot;version&quot;: &quot;2.0.0&quot;, // Optional. Defers to containing document version
+  &quot;ip&quot;: &quot;1.2.3.4&quot;, // Must be an ip. Required if &quot;dns&quot; is missing
+  &quot;dns&quot;: &quot;hostname.smc&quot; // Must be a dns resolvable hostname or entry. Required if &quot;ip&quot; is missing
+}
+</code></pre>
+
+<h3 id="signal_5">Signal</h3>
+<p>None</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../json-formats/" class="btn btn-neutral" title="Config and Message Formats"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../json-formats/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>
