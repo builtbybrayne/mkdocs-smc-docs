@@ -1,6 +1,6 @@
 # Currently Supported Signals and Properties
 
-This is a manually generated doc with examples. It is not canonical. See [https://bitbucket.org/smc-dev/smc-validators]() for actual schemas.
+This is a manually generated doc with examples. It is not canonical. See [https://bitbucket.org/smc-dev/smc-validators](https://bitbucket.org/smc-dev/smc-validators) for actual schemas.
 
 *I intend to auto-generate docs for schemas fairly soon (Al)*
 
