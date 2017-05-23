@@ -1,4 +1,4 @@
-# Terminology and Concepts
+# Platform Terminology
 
 These terms are used within the SMC Platform, and drive the design of the API for integration with onsite hardware.
 
@@ -23,7 +23,7 @@ The actual data created by devices is decomposed into a 2-tier hierarchy within 
 
 For example, a meter might emit messages at a lower frequency than its sampling rate, with numeric readings aggregated into multiple `attributes` including mean, std deviation, max and min. All these `attributes` are transmitted together and constitute a single `signal`. 
 
-`Signals` also help us decompose complex `devices` into generic collections of data readings for more generalised processing within the `platform`. For example, both wind turbines and pv arrays have sensors which register their power output. A general contract for power meters can be registered with the `platform` in the form of a schema that defines the expected `attributes` of a power meter. The integrations to both devices can reuse this contract to format data, in the knowledge that other components of the `platform` can also understand this power meter contract and consume the data.
+`Signals` also help us decompose complex `devices` into generic collections of data readings for more generalised processing within the `platform`. For example, both wind turbines and pv arrays have sensors which register their power output. A general contract for power meters can be registered with the `platform` in the form of a schema that defines the expected `attributes` of a power meter. The integrations to both devices can reuse this contract to format data as a known `signal`. Other components of the `platform` can also understand the power meter contract, and consume the data in the `signal`.
 
 The API exposed to external integrations is in large part this set of schemas that define the known `signal` contracts. These schemas are registered with the `platform` against unique, predefined keys and form the semantic dictionary of the installation.
 
